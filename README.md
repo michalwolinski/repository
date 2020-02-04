@@ -19,7 +19,9 @@ I propose to use Dependency Injection to inject `Repository` interface.
 Example implementation in service class:
 ```php
 
-use MichalWolinski\Repository\Criteria\OrderBy;use MichalWolinski\Repository\Criteria\Status;use MichalWolinski\Repository\Interfaces\Repository;
+use MichalWolinski\Repository\Criteria\OrderBy;
+use MichalWolinski\Repository\Criteria\Status;
+use MichalWolinski\Repository\Interfaces\Repository;
 use App\User;
 
 class Service {
