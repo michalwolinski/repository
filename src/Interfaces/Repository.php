@@ -2,9 +2,9 @@
 
 namespace MichalWolinski\Repository\Interfaces;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
-use MichalWolinski\Repository\Exceptions\RepositoryException;
 
 interface Repository
 {
@@ -33,4 +33,21 @@ interface Repository
      * @return Collection
      */
     public function getAll(): Collection;
+
+    /**
+     * @param string $column
+     * @param string|null $operator
+     * @param string|null $value
+     *
+     * @return Collection
+     */
+    public function getWhere(string $column, ?string $operator = null, ?string $value = null): Collection;
+
+    /**
+     * @param Criterion[] $criteria
+     * @param Builder|null $query
+     *
+     * @return Collection
+     */
+    public function getByCriteria(array $criteria, ?Builder $query = null): Collection;
 }

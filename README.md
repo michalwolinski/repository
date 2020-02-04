@@ -1,6 +1,7 @@
 # Repository
 
 Repository Pattern implementation for Laravel.
+Criteria are based on Filter Design Pattern.
 
 ---
 ## Installation by Composer
@@ -16,9 +17,9 @@ Repository Pattern implementation for Laravel.
 I propose to use Dependency Injection to inject `Repository` interface.
 
 Example implementation in service class:
-```
+```php
 
-use MichalWolinski\Repository\Interfaces\Repository;
+use MichalWolinski\Repository\Criteria\OrderBy;use MichalWolinski\Repository\Criteria\Status;use MichalWolinski\Repository\Interfaces\Repository;
 use App\User;
 
 class Service {
@@ -30,20 +31,36 @@ class Service {
         $this->repository = $repository->getInstance($user);
     }
 
-    public getAllUsers(): void
+    public function getAllUsers(): void
     {
         $allUsers = $this->repository->getAll();
     }
 
-    public getUserById(int $id): void
+    public function getUserById(int $id): void
     {
         $user = $this->repository->get($id);
     }
 
-    public getUserByIds(array $ids): void
+    public function getUserByIds(array $ids): void
     {
         $users = $this->repository->getMany($ids);
     }
+
+    public function getGmailUsers(): void
+    {
+        $users = $this->repository->getWhere('email', 'LIKE', '%@gmail.com');
+    }
+
+    public function getByCriteria(): void 
+    {
+        $criteria = [
+            new Status('Active'),
+            new OrderBy('created_at')
+        ];
+        
+        $users = $this->repository->getByCriteria($criteria);
+    }
+
 }
 ```
 

@@ -5,6 +5,7 @@ namespace MichalWolinski\Repository;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
+use MichalWolinski\Repository\Interfaces\Criterion;
 use MichalWolinski\Repository\Interfaces\Repository as RepositoryInterface;
 
 /**
@@ -21,7 +22,7 @@ class Repository implements RepositoryInterface
     /**
      * @var Builder
      */
-    private Builder $builder;
+    protected Builder $builder;
 
     /**
      * @param string $model
@@ -62,6 +63,35 @@ class Repository implements RepositoryInterface
     public function getAll(): Collection
     {
         return $this->builder->get();
+    }
+
+    /**
+     * @param string $column
+     * @param string|null $operator
+     * @param string|null $value
+     *
+     * @return Collection
+     */
+    public function getWhere(string $column, ?string $operator = null, ?string $value = null): Collection
+    {
+        return $this->builder->where($column, $operator, $value)->get();
+    }
+
+    /**
+     * @param Criterion[] $criteria
+     * @param Builder|null $query
+     *
+     * @return Collection
+     */
+    public function getByCriteria(array $criteria, ?Builder $query = null): Collection
+    {
+        $query ??= $this->builder;
+
+        foreach ($criteria as $criterion) {
+            $criterion->apply($query);
+        }
+
+        return $query->get();
     }
 
     /**
